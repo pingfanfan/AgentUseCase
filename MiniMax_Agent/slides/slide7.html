@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>性能展示：M1在真实世界中的表现</title>
+  <style>
+    @keyframes bar-fill {
+      from { width: 0; }
+    }
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'PingFang SC', 'Helvetica Neue', 'Microsoft YaHei', sans-serif;
+      background-color: #1C2030;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .slide {
+      width: 1280px;
+      height: 720px;
+      background-color: #1C2030;
+      color: #E0E0E0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      position: relative;
+      overflow: hidden;
+      padding: 60px 40px;
+      box-sizing: border-box;
+    }
+    .background-graph {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      opacity: 0.5;
+    }
+    .content-wrapper {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: fade-in 1s ease-out;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .header h1 {
+      font-size: 48px;
+      color: #FFFFFF;
+      font-weight: 600;
+      margin: 0 0 12px 0;
+    }
+    .header h2 {
+      font-size: 24px;
+      color: #AAB0C0;
+      font-weight: 400;
+      margin: 0 0 30px 0;
+    }
+    .banner {
+      display: inline-block;
+      background: rgba(42, 47, 69, 0.5);
+      border-left: 4px solid #FBBF24;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 18px;
+      color: #D1D5DB;
+    }
+    .banner strong {
+      color: #FBBF24;
+      font-weight: 600;
+    }
+    .card-container {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      max-width: 1140px;
+      margin-top: 40px;
+      gap: 30px;
+    }
+    .card {
+      background: linear-gradient(145deg, #2A2F45, #24283B);
+      border-radius: 16px;
+      padding: 28px;
+      flex: 1;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      font-size: 22px;
+      color: #FBBF24;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .card-header .icon {
+      width: 28px;
+      height: 28px;
+      margin-right: 12px;
+    }
+    .card-description {
+      font-size: 16px;
+      color: #B0B8D0;
+      line-height: 1.6;
+      margin: 0 0 24px 0;
+      height: 75px;
+    }
+    .comparison-section {
+      margin-top: auto;
+    }
+    .bar-item {
+      margin-bottom: 16px;
+    }
+    .bar-item:last-child {
+      margin-bottom: 0;
+    }
+    .bar-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 15px;
+      color: #D1D5DB;
+    }
+    .tag {
+      color: #1C2030;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .tag-leading {
+      background-color: #6EE7B7;
+    }
+    .tag-surpass {
+      background-color: #34D399;
+    }
+    .progress-bg {
+      height: 12px;
+      background-color: rgba(0, 0, 0, 0.3);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 6px;
+      animation: bar-fill 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+    .m1-bar {
+      background: linear-gradient(90deg, #10B981, #6EE7B7);
+    }
+    .competitor-bar {
+      background: linear-gradient(90deg, #4F46E5, #818CF8);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="slide">
+    <svg class="background-graph" viewBox="0 0 1280 720" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="line-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style="stop-color:#4F46E5; stop-opacity:0.6" />
+          <stop offset="100%" style="stop-color:#34D399; stop-opacity:0.6" />
+        </linearGradient>
+      </defs>
+      <g fill="none" stroke="#4A5568" stroke-width="1" stroke-opacity="0.5">
+        <line x1="80" y1="150" x2="1200" y2="150"></line>
+        <line x1="80" y1="250" x2="1200" y2="250"></line>
+        <line x1="80" y1="350" x2="1200" y2="350"></line>
+        <line x1="80" y1="450" x2="1200" y2="450"></line>
+        <line x1="80" y1="550" x2="1200" y2="550"></line>
+      </g>
+      <g fill="#6B7280" font-size="14" font-family="sans-serif" text-anchor="end">
+        <text x="70" y="155">250</text>
+        <text x="70" y="255">200</text>
+        <text x="70" y="355">150</text>
+        <text x="70" y="455">100</text>
+      </g>
+      <text transform="rotate(-90)" x="-250" y="40" fill="#6B7280" font-size="14" font-family="sans-serif" text-anchor="middle">Power (Watts)</text>
+      <path d="M 200 400 C 400 350, 600 200, 800 180 S 1000 150, 1150 120" stroke="url(#line-gradient)" stroke-width="3" fill="none" stroke-linecap="round"></path>
+      <g fill="#6B7280" font-size="14" font-family="sans-serif" text-anchor="middle">
+        <text x="400" y="680">13</text>
+        <text x="600" y="680">17</text>
+        <text x="800" y="680">21</text>
+        <text x="1000" y="680">25</text>
+      </g>
+      <text x="1240" y="680" fill="#6B7280" font-size="20" font-family="sans-serif" text-anchor="middle">7</text>
+    </svg>
+
+    <div class="content-wrapper">
+      <div class="header">
+        <h1>性能展示: M1在真实世界中的表现</h1>
+        <h2>M1的实战能力如何？</h2>
+        <div class="banner">
+          <strong>综合实力：</strong>在数学、编程等核心能力上，与全球顶尖模型并驾齐驱
+        </div>
+      </div>
+
+      <div class="card-container">
+        <!-- Card 1: 软件工程 -->
+        <div class="card" style="animation-delay: 0.2s;">
+          <div class="card-header">
+            <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"></path></svg>
+            <span>软件工程</span>
+          </div>
+          <p class="card-description">解决真实GitHub问题的能力，展现卓越的工程实践水平。</p>
+          <div class="comparison-section">
+            <div class="bar-item">
+              <div class="bar-label">
+                <span>M1 模型</span>
+                <span class="tag tag-leading">领先</span>
+              </div>
+              <div class="progress-bg">
+                <div class="progress-fill m1-bar" style="width: 95%;"></div>
+              </div>
+            </div>
+            <div class="bar-item">
+              <div class="bar-label"><span>顶尖竞品</span></div>
+              <div class="progress-bg">
+                <div class="progress-fill competitor-bar" style="width: 75%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: 工具使用 -->
+        <div class="card" style="animation-delay: 0.4s;">
+          <div class="card-header">
+            <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19.44 12.99l-2.54-1.15c-.15-.07-.25-.21-.25-.37V8.89c0-.23.23-.39.45-.3l2.45.98c.43.17.65.65.48 1.08l-1.1 2.72c-.17.42-.65.65-1.09.48zM19.13 7.82c-.22.09-.45-.07-.45-.3V4.94c0-.17.09-.32.25-.37l2.54-1.15c.43-.17.91.06 1.09.48l1.1 2.72c.17.42-.06.91-.48 1.08l-2.45.98c-.22.09-.45-.07-.45-.3V7.82zM12 17.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5zM4.87 7.82v.79c0 .17-.09.32-.25.37l-2.45.98c-.43.17-.91-.06-1.09-.48l-1.1-2.72C-.19 6.32.04 5.84.47 5.66l2.54-1.15c.15-.07.25-.21.25-.37V1.56c0-.23.23-.39.45-.3l2.45.98c.43.17.65.65.48 1.08L4.87 7.82z"></path></svg>
+            <span>工具使用 (Agent)</span>
+          </div>
+          <p class="card-description">作为智能体调用工具的能力，高效完成复杂任务。</p>
+          <div class="comparison-section">
+            <div class="bar-item">
+              <div class="bar-label">
+                <span>M1 模型</span>
+                <span class="tag tag-surpass">超越</span>
+              </div>
+              <div class="progress-bg">
+                <div class="progress-fill m1-bar" style="width: 90%;"></div>
+              </div>
+            </div>
+            <div class="bar-item">
+              <div class="bar-label"><span>Gemini 2.5 Pro</span></div>
+              <div class="progress-bg">
+                <div class="progress-fill competitor-bar" style="width: 65%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: 长文本理解 -->
+        <div class="card" style="animation-delay: 0.6s;">
+          <div class="card-header">
+            <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h12v-2H3v2zM3 6v2h18V6H3zm0 7h18v-2H3v2z"></path></svg>
+            <span>长文本理解</span>
+          </div>
+          <p class="card-description">在海量信息中精准提炼关键内容，阅读理解能力出众。</p>
+          <div class="comparison-section">
+            <div class="bar-item">
+              <div class="bar-label">
+                <span>M1 模型</span>
+                <span class="tag tag-surpass">超越</span>
+              </div>
+              <div class="progress-bg">
+                <div class="progress-fill m1-bar" style="width: 92%;"></div>
+              </div>
+            </div>
+            <div class="bar-item">
+              <div class="bar-label"><span>OpenAI o3 & Claude 4</span></div>
+              <div class="progress-bg">
+                <div class="progress-fill competitor-bar" style="width: 80%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

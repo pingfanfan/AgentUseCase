@@ -1,0 +1,63 @@
+# GitHub Pages Configuration
+title: "Agent PPT 竞赛展示平台"
+description: "不同AI Agent基于同一PDF文档制作PPT的对比展示平台"
+url: "https://your-username.github.io"
+baseurl: "/Agent-PPT-competition"
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Exclude files from processing
+exclude:
+  - README.md
+  - CONTRIBUTING.md
+  - LICENSE
+  - .github/
+  - .gitignore
+
+# Include files
+include:
+  - _pages
+
+# Collections
+collections:
+  agents:
+    output: true
+    permalink: /:collection/:name/
+
+# Default values
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
+  - scope:
+      path: ""
+      type: "agents"
+    values:
+      layout: "agent"
+
+# SEO settings
+author: "Agent PPT Competition Team"
+twitter:
+  username: your_twitter
+  card: summary_large_image
+
+social:
+  name: Agent PPT Competition
+  links:
+    - https://github.com/your-username/Agent-PPT-competition
+
+# Analytics (optional)
+# google_analytics: UA-XXXXXXXX-X
+
+# Theme (optional)
+# theme: minima

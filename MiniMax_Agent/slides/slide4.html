@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>揭秘M1的“超级引擎”：闪电注意力</title>
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes glow {
+      0%, 100% { text-shadow: 0 0 20px #ffee00, 0 0 40px #ffee00, 0 0 60px #ffee00; }
+      50% { text-shadow: 0 0 30px #ffff55, 0 0 50px #ffff55, 0 0 70px #ffff55; }
+    }
+
+    @keyframes lightning-flash {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 0.3; }
+    }
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #000;
+    }
+
+    .ppt-slide {
+      width: 1280px;
+      height: 720px;
+      background-color: #0A0F2D;
+      background-image: radial-gradient(circle at 50% 50%, rgba(26, 35, 126, 0.5) 0%, rgba(13, 18, 60, 0.8) 70%, #0A0F2D 100%);
+      position: relative;
+      overflow: hidden;
+      font-family: 'PingFang SC', 'Helvetica Neue', 'Microsoft YaHei', sans-serif;
+      color: #ffffff;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .lightning {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720"><g stroke-width="2" stroke="%23FEEA00" stroke-opacity="0.2"><path d="M 100 0 L 150 100 L 120 100 L 200 250 L 170 250 L 250 450" fill="none"/><path d="M 1180 720 L 1130 620 L 1160 620 L 1080 470 L 1110 470 L 1030 270" fill="none"/><path d="M 500 0 L 480 80 L 510 80 L 450 200 L 480 200 L 380 400" fill="none"/><path d="M 800 720 L 820 640 L 790 640 L 850 520 L 820 520 L 920 320" fill="none"/></g></svg>');
+      background-size: cover;
+      animation: lightning-flash 6s infinite ease-in-out;
+      animation-delay: 1s;
+    }
+     .lightning-2 {
+      animation-delay: 3s;
+      transform: rotate(180deg);
+    }
+
+    .header {
+      text-align: center;
+      padding-top: 50px;
+    }
+
+    .main-title {
+      font-size: 48px;
+      font-weight: bold;
+      color: #FEEA00;
+      text-shadow: 0 0 10px rgba(254, 234, 0, 0.5);
+    }
+
+    .subtitle {
+      font-size: 24px;
+      color: #E0E0E0;
+      margin-top: 10px;
+    }
+
+    .content-area {
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-start;
+      margin-top: 80px;
+      padding: 0 80px;
+    }
+
+    .comparison-column {
+      width: 40%;
+      text-align: center;
+    }
+
+    .column-title {
+      font-size: 28px;
+      font-weight: 600;
+      padding-bottom: 10px;
+      border-bottom: 3px solid #FEEA00;
+      display: inline-block;
+      margin-bottom: 40px;
+    }
+
+    .diagram {
+      height: 150px;
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .description {
+      font-size: 18px;
+      line-height: 1.6;
+      color: #B0C4DE;
+      max-width: 350px;
+      margin: 0 auto;
+    }
+
+    .center-highlight {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 10;
+    }
+
+    .percentage {
+      font-size: 160px;
+      font-weight: bold;
+      color: #FEEA00;
+      line-height: 1;
+      animation: glow 3s infinite ease-in-out;
+    }
+
+    .percentage-label {
+      font-size: 28px;
+      color: #E0E0E0;
+      margin-top: 10px;
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 40px;
+      width: 100%;
+      text-align: center;
+      font-size: 16px;
+      color: #A9A9A9;
+    }
+    
+    .footer span {
+      color: #FEEA00;
+      font-weight: bold;
+    }
+
+    svg {
+        overflow: visible;
+    }
+    
+    .trad-line {
+        stroke: #A9A9A9;
+        stroke-width: 2;
+    }
+    .trad-dot {
+        fill: #A9A9A9;
+    }
+    .flash-line {
+        stroke: #FEEA00;
+        stroke-width: 4;
+    }
+    .flash-dot {
+        fill: #FEEA00;
+        filter: drop-shadow(0 0 5px #FEEA00);
+    }
+  </style>
+</head>
+<body>
+  <div class="ppt-slide">
+    <div class="lightning"></div>
+    <div class="lightning lightning-2"></div>
+
+    <div class="header">
+      <h1 class="main-title">揭秘M1的“超级引擎”：闪电注意力</h1>
+      <p class="subtitle">M1为何如此高效？</p>
+    </div>
+
+    <div class="center-highlight">
+      <div class="percentage">75%</div>
+      <div class="percentage-label">FLOPs 降低</div>
+    </div>
+
+    <div class="content-area">
+      <div class="comparison-column">
+        <h2 class="column-title">传统注意力</h2>
+        <div class="diagram">
+            <svg width="250" height="150" viewBox="0 0 250 150">
+                <circle class="trad-dot" cx="25" cy="25" r="8"></circle>
+                <circle class="trad-dot" cx="225" cy="25" r="8"></circle>
+                <circle class="trad-dot" cx="125" cy="75" r="8"></circle>
+                <circle class="trad-dot" cx="25" cy="125" r="8"></circle>
+                <circle class="trad-dot" cx="225" cy="125" r="8"></circle>
+
+                <line class="trad-line" x1="25" y1="25" x2="225" y2="25"></line>
+                <line class="trad-line" x1="25" y1="125" x2="225" y2="125"></line>
+                <line class="trad-line" x1="25" y1="25" x2="125" y2="75"></line>
+                <line class="trad-line" x1="225" y1="25" x2="125" y2="75"></line>
+                <line class="trad-line" x1="25" y1="125" x2="125" y2="75"></line>
+                <line class="trad-line" x1="225" y1="125" x2="125" y2="75"></line>
+                <line class="trad-line" x1="25" y1="25" x2="225" y2="125"></line>
+                <line class="trad-line" x1="225" y1="25" x2="25" y2="125"></line>
+            </svg>
+        </div>
+        <p class="description">告别“暴力计算”：传统模型处理长文本就像地毯式搜索，效率低下。</p>
+      </div>
+      <div class="comparison-column">
+        <h2 class="column-title">闪电注意力</h2>
+        <div class="diagram">
+            <svg width="250" height="150" viewBox="0 0 250 150">
+                <line class="flash-line" x1="25" y1="75" x2="225" y2="75"></line>
+                <circle class="flash-dot" cx="25" cy="75" r="10"></circle>
+                <circle class="flash-dot" cx="125" cy="75" r="10"></circle>
+                <circle class="flash-dot" cx="225" cy="75" r="10"></circle>
+            </svg>
+        </div>
+        <p class="description">M1的智慧：“闪电注意力”像一个智能导航，用线性复杂度快速定位关键信息。</p>
+      </div>
+    </div>
+
+    <div class="footer">
+      vs DeepSeek R1, 100K token 生成, FLOPs 降低 <span>75%</span>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PPT 第8页：思考得更久，结果会更好</title>
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes drawPath {
+      from { stroke-dashoffset: 1000; }
+      to { stroke-dashoffset: 0; }
+    }
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #000;
+      font-family: 'Helvetica Neue', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    }
+
+    .slide {
+      width: 1280px;
+      height: 720px;
+      background-color: #0a192f;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      color: #fff;
+    }
+
+    .slide::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('./images/data_processing.png');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.1;
+      z-index: 1;
+    }
+
+    .header, .content, .footer {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      padding: 0 60px;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    .header {
+      padding-top: 50px;
+      animation: fadeInUp 1s ease-out;
+    }
+
+    .header h1 {
+      font-size: 52px;
+      font-weight: 600;
+      margin: 0;
+      letter-spacing: 2px;
+      color: #ffffff;
+      text-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
+    }
+
+    .header h2 {
+      font-size: 28px;
+      font-weight: 300;
+      margin: 10px 0 0;
+      color: #a8b2d1;
+    }
+
+    .content {
+      flex-grow: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    .chart-container {
+      position: absolute;
+      left: 50%;
+      top: 55%;
+      transform: translate(-50%, -50%);
+      width: 700px;
+      height: 350px;
+      opacity: 0;
+      animation: fadeIn 1s 0.5s ease-out forwards;
+    }
+    
+    .chart-axes {
+      position: absolute;
+      bottom: 30px;
+      left: 40px;
+      width: calc(100% - 40px);
+      height: calc(100% - 30px);
+      border-left: 2px solid rgba(136, 146, 176, 0.5);
+      border-bottom: 2px solid rgba(136, 146, 176, 0.5);
+    }
+
+    .axis-label {
+      position: absolute;
+      color: #8892b0;
+      font-size: 16px;
+    }
+    .y-axis-label {
+      transform: rotate(-90deg);
+      left: -50px;
+      top: 40%;
+    }
+    .x-axis-label {
+      bottom: -5px;
+      left: 45%;
+    }
+
+    .chart-curve {
+      width: 100%;
+      height: 100%;
+    }
+    .chart-curve svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .curve-path {
+      fill: none;
+      stroke-width: 6;
+      stroke-linecap: round;
+      stroke: url(#line-gradient);
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      animation: drawPath 2s 1s ease-out forwards;
+    }
+
+    .data-point {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      opacity: 0;
+      animation: fadeIn 0.5s forwards;
+    }
+    .point-40k {
+      background-color: #ffb74d;
+      border: 2px solid #fff;
+      bottom: 120px;
+      left: 180px;
+      animation-delay: 2s;
+    }
+    .point-80k {
+      background-color: #66bb6a;
+      border: 2px solid #fff;
+      bottom: 260px;
+      left: 500px;
+      animation-delay: 2.5s;
+    }
+
+    .data-box {
+      width: 300px;
+      padding: 25px;
+      background: rgba(42, 63, 95, 0.5);
+      border: 1px solid rgba(0, 191, 255, 0.3);
+      border-radius: 12px;
+      backdrop-filter: blur(5px);
+      text-align: left;
+      opacity: 0;
+      animation: fadeInUp 1s 0.8s ease-out forwards;
+      z-index: 10;
+    }
+    
+    .data-box.left {
+      margin-right: auto;
+    }
+    .data-box.right {
+      margin-left: auto;
+    }
+
+    .data-box h3 {
+      font-size: 24px;
+      margin: 0 0 15px 0;
+      font-weight: 600;
+    }
+    .data-box-40k h3 { color: #ffb74d; }
+    .data-box-80k h3 { color: #66bb6a; }
+
+    .data-box p {
+      font-size: 18px;
+      color: #ccd6f6;
+      margin: 5px 0;
+      line-height: 1.6;
+    }
+
+    .data-box .highlight {
+      font-size: 36px;
+      font-weight: bold;
+      display: block;
+      margin-top: 10px;
+    }
+    .data-box-40k .highlight { color: #ffb74d; }
+    .data-box-80k .highlight { color: #66bb6a; }
+    
+    .data-box .improvement {
+      font-size: 20px;
+      font-weight: 600;
+      color: #66bb6a;
+    }
+
+    .footer {
+      padding-bottom: 40px;
+      font-size: 20px;
+      font-style: italic;
+      color: #a8b2d1;
+      opacity: 0;
+      animation: fadeInUp 1s 1.2s ease-out forwards;
+    }
+    
+    .decoration {
+      position: absolute;
+      font-size: 32px;
+      color: rgba(0, 191, 255, 0.15);
+      z-index: 1;
+      animation: float 8s ease-in-out infinite;
+    }
+    .deco-1 { top: 15%; left: 8%; animation-delay: 0s; }
+    .deco-2 { top: 25%; right: 10%; font-size: 40px; animation-delay: -2s; }
+    .deco-3 { bottom: 10%; left: 20%; font-size: 36px; animation-delay: -4s; }
+    .deco-4 { bottom: 20%; right: 18%; font-size: 28px; animation-delay: -6s; }
+  </style>
+</head>
+<body>
+  <div class="slide">
+    <div class="header">
+      <h1>思考得更久，结果会更好</h1>
+      <h2>为什么80K比40K更强？</h2>
+    </div>
+
+    <div class="content">
+      <div class="data-box data-box-40k left">
+        <h3>40K (标准版)</h3>
+        <p>我们训练了模型的标准版本，在数学竞赛等复杂任务上表现出色。</p>
+        <span class="highlight">75.2%</span>
+        <p>数学竞赛准确率</p>
+      </div>
+
+      <div class="data-box data-box-80k right">
+        <h3>80K (深度思考版)</h3>
+        <p>通过扩展训练，模型准确率获得持续且显著的提升。</p>
+        <span class="highlight">85.1%</span>
+        <p>数学竞赛准确率 <span class="improvement">(+9.9%)</span></p>
+      </div>
+    </div>
+    
+    <div class="chart-container">
+      <div class="chart-axes">
+        <span class="axis-label y-axis-label">准确率 (Accuracy)</span>
+        <span class="axis-label x-axis-label">推理步数 (Inference Steps)</span>
+      </div>
+      <div class="chart-curve">
+        <svg viewBox="0 0 600 300">
+          <defs>
+            <linearGradient id="line-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#ffb74d;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#66bb6a;stop-opacity:1" />
+            </linearGradient>
+          </defs>
+          <path class="curve-path" d="M 140 210 C 250 210, 350 70, 460 70" />
+        </svg>
+      </div>
+      <div class="data-point point-40k"></div>
+      <div class="data-point point-80k"></div>
+    </div>
+
+    <div class="footer">
+      <p>这证实了M1的核心设计理念：更长的推理过程能带来更优的解决方案。</p>
+    </div>
+    
+    <div class="decoration deco-1">∫</div>
+    <div class="decoration deco-2">∑</div>
+    <div class="decoration deco-3">β = (X'X)⁻¹X'y</div>
+    <div class="decoration deco-4">≈</div>
+  </div>
+</body>
+</html>

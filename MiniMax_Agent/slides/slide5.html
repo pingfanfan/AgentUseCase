@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page 5: M1's "Expert Brain": Mixture of Experts (MoE)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #000;
+      font-family: 'Poppins', 'Noto Sans SC', sans-serif;
+    }
+
+    .slide {
+      width: 1280px;
+      height: 720px;
+      background-color: #0d0525;
+      position: relative;
+      overflow: hidden;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+    .slide::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('./images/brain_network.jpg') no-repeat center center;
+      background-size: cover;
+      opacity: 0.25;
+      pointer-events: none;
+      filter: blur(2px);
+    }
+
+    .title-container {
+      position: absolute;
+      top: 50px;
+      left: 60px;
+      text-align: left;
+      z-index: 20;
+    }
+
+    .main-title {
+      font-size: 48px;
+      font-weight: 700;
+      color: #00f0ff;
+      margin: 0;
+      text-shadow: 0 0 15px rgba(0, 240, 255, 0.7);
+    }
+
+    .subtitle {
+      font-size: 24px;
+      font-weight: 400;
+      color: #c0c0ff;
+      margin-top: 10px;
+      opacity: 0.9;
+    }
+
+    .diagram-container {
+      position: absolute;
+      width: 700px;
+      height: 450px;
+      top: 180px;
+      left: 80px;
+      z-index: 5;
+    }
+
+    .central-brain {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 160px;
+      height: 160px;
+      background: radial-gradient(circle, #5e28a7, #3c1078);
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      font-size: 22px;
+      font-weight: 600;
+      border: 3px solid #00f0ff;
+      box-shadow: 0 0 25px #00f0ff, inset 0 0 20px rgba(173, 216, 230, 0.4);
+      animation: central-pulse 4s infinite ease-in-out;
+    }
+
+    .central-brain span {
+      font-size: 16px;
+      opacity: 0.8;
+      font-weight: 400;
+      margin-top: 5px;
+    }
+
+    .expert {
+      position: absolute;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 15px;
+      font-weight: 500;
+      text-align: center;
+      border: 2px solid;
+      transition: all 0.3s ease;
+    }
+
+    .expert.inactive {
+      background-color: rgba(60, 60, 100, 0.4);
+      border-color: #4a5599;
+      color: #a0a0c0;
+      filter: grayscale(50%);
+    }
+
+    .expert.active {
+      animation: expert-pulse 2s infinite ease-in-out;
+    }
+
+    #math {
+      top: 20px;
+      left: 100px;
+      background-color: rgba(0, 119, 255, 0.7);
+      border-color: #00c6ff;
+      box-shadow: 0 0 15px #00c6ff;
+    }
+
+    #coding {
+      top: 100px;
+      left: 580px;
+      background-color: rgba(0, 160, 64, 0.7);
+      border-color: #00ff9c;
+      box-shadow: 0 0 15px #00ff9c;
+    }
+
+    #lit { top: 340px; left: 500px; }
+    #science { top: 350px; left: 220px; }
+    #history { top: 200px; left: 0px; }
+    #art { top: 320px; left: 0px; }
+
+
+    .lines {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .line {
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .line.inactive {
+      stroke: #4a5599;
+      opacity: 0.6;
+    }
+
+    .line.active {
+      stroke: url(#flow-gradient);
+      stroke-dasharray: 10 10;
+      animation: flow 3s linear infinite;
+    }
+
+    #line-coding {
+      stroke: url(#flow-gradient-green);
+    }
+    
+    .content-area {
+      position: absolute;
+      bottom: 50px;
+      right: 60px;
+      width: 420px;
+      text-align: right;
+      z-index: 10;
+      background: rgba(13, 5, 37, 0.5);
+      padding: 25px;
+      border-radius: 10px;
+      border-left: 3px solid #00f0ff;
+    }
+
+    .content-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 25px 0;
+    }
+
+    .content-list li {
+      font-size: 19px;
+      line-height: 1.7;
+      margin-bottom: 15px;
+      color: #e0e0ff;
+    }
+
+    .content-list li strong {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .params-container {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(0, 240, 255, 0.3);
+    }
+
+    .params-title {
+        font-size: 16px;
+        color: #c0c0ff;
+        margin-bottom: 10px;
+    }
+
+    .params {
+      font-size: 40px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 20px;
+    }
+
+    .params .total {
+      font-size: 32px;
+      color: #999;
+      position: relative;
+    }
+    .params .total::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 100%;
+        height: 3px;
+        background: #ff4d4d;
+        transform: rotate(-5deg);
+        opacity: 0.7;
+    }
+
+    .params .active-params {
+      color: #00ff9c;
+      text-shadow: 0 0 15px #00ff9c;
+      transform: scale(1.1);
+    }
+
+    .arrow {
+      font-size: 40px;
+      color: #00f0ff;
+      font-weight: 600;
+    }
+
+    @keyframes central-pulse {
+      0%, 100% { box-shadow: 0 0 25px #00f0ff, inset 0 0 20px rgba(173, 216, 230, 0.4); }
+      50% { box-shadow: 0 0 35px #8e2de2, inset 0 0 30px rgba(173, 216, 230, 0.6); }
+    }
+    @keyframes expert-pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: 0.9; }
+    }
+    @keyframes flow {
+      to { stroke-dashoffset: -200; }
+    }
+  </style>
+</head>
+<body>
+  <div class="slide">
+    <div class="title-container">
+      <h1 class="main-title">M1的"专家大脑"：混合专家模型</h1>
+      <h2 class="subtitle">M1如何兼顾"博学"与"专注"？</h2>
+    </div>
+
+    <div class="diagram-container">
+      <svg class="lines">
+        <defs>
+          <linearGradient id="flow-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#8e2de2;stop-opacity:0" />
+            <stop offset="100%" style="stop-color:#00f0ff;stop-opacity:1" />
+          </linearGradient>
+           <linearGradient id="flow-gradient-green" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#8e2de2;stop-opacity:0" />
+            <stop offset="100%" style="stop-color:#00ff9c;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <!-- Active Lines -->
+        <line class="line active" x1="350" y1="225" x2="145" y2="65"></line> <!-- to Math -->
+        <line id="line-coding" class="line active" x1="350" y1="225" x2="625" y2="145"></line> <!-- to Coding -->
+        
+        <!-- Inactive Lines -->
+        <line class="line inactive" x1="350" y1="225" x2="545" y2="385"></line> <!-- to Lit -->
+        <line class="line inactive" x1="350" y1="225" x2="265" y2="395"></line> <!-- to Science -->
+        <line class="line inactive" x1="350" y1="225" x2="45" y2="245"></line> <!-- to History -->
+        <line class="line inactive" x1="350" y1="225" x2="45" y2="365"></line> <!-- to Art -->
+      </svg>
+
+      <div class="central-brain">MoE 路由<span>Router / Gating</span></div>
+      
+      <div id="math" class="expert active">数学<br>Math</div>
+      <div id="coding" class="expert active">编程<br>Coding</div>
+      <div id="lit" class="expert inactive">文学<br>Literature</div>
+      <div id="science" class="expert inactive">科学<br>Science</div>
+      <div id="history" class="expert inactive">历史<br>History</div>
+      <div id="art" class="expert inactive">艺术<br>Art</div>
+    </div>
+
+    <div class="content-area">
+      <ul class="content-list">
+        <li><strong>类比：</strong> M1的大脑不是一个"万事通"，而是一个高效的<strong>"专家顾问团"</strong>。</li>
+        <li><strong>工作方式：</strong> 遇到问题，路由网络只派出最相关的几位"专家"协作解决，其他专家则待命，节省能耗。</li>
+      </ul>
+      <div class="params-container">
+        <div class="params-title">优势：海量知识，轻量激活</div>
+        <div class="params">
+          <span class="total">4560亿</span>
+          <span class="arrow">→</span>
+          <span class="active-params">459亿</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
